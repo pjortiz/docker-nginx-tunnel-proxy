@@ -1,7 +1,7 @@
 [submodule "docker-nginx"]
 	path = docker-nginx
-	url = git@github.com:pjortiz/docker-nginx.git
+	url = https://github.com/pjortiz/docker-nginx.git
 	branch = v1.21.6
 [submodule "ngx_http_proxy_connect_module"]
 	path = ngx_http_proxy_connect_module
-	url = git@github.com:pjortiz/ngx_http_proxy_connect_module.git
+	url = https://github.com/pjortiz/ngx_http_proxy_connect_module.git
