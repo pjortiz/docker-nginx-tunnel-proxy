@@ -1,0 +1,48 @@
+http {
+
+    # dns resolver used by forward proxying
+    resolver ${NGINX_DNS_RESOLVER};
+    resolver_timeout 10s;
+
+    server {
+        listen  ${NGINX_LISTEN_PORT} default_server;
+
+        # forward proxy for CONNECT request
+        proxy_connect;
+        proxy_connect_allow            ${NGINX_DNS_RESOLVER};
+        proxy_connect_connect_timeout  10s;
+        proxy_connect_read_timeout     10s;
+        proxy_connect_send_timeout     10s;
+   
+        # forward proxy for non-CONNECT request
+        location / {
+            proxy_pass http://$host;
+            proxy_set_header Host $host;
+        }
+    }
+
+    server {
+        listen  ${NGINX_LISTEN_PORT};
+        server_name ${NGINX_SERVER_NAME_FILTER};
+        
+        # forward proxy for CONNECT request
+        proxy_connect;
+        proxy_connect_allow            ${NGINX_DNS_RESOLVER};
+        proxy_connect_connect_timeout  10s;
+        proxy_connect_read_timeout     10s;
+        proxy_connect_send_timeout     10s;
+
+        set $address $host;
+        
+        if ("${SECONDARY_PROXY}" != "") {
+            proxy_connect_address      ${SECONDARY_PROXY};
+            set $address ${SECONDARY_PROXY};
+        }
+        
+        # forward proxy for non-CONNECT request
+        location / {
+            proxy_pass http://$address;
+            proxy_set_header Host $host;
+        }
+    }
+}

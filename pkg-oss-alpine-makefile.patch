@@ -1,0 +1,21 @@
+--- Makefile.original	2022-07-06 21:53:41.968000000 -0400
++++ Makefile.module-connect	2022-07-06 22:13:35.913320300 -0400
+@@ -7,6 +7,8 @@
+ BASE_TARGET?=	oss
+ MODULE_TARGET?=	oss
+ 
++CONNECT_MODULE?=	/ngx_http_proxy_connect_module
++
+ ifeq ($(BASE_TARGET), plus)
+ BASE_SUFFIX=-plus
+ endif
+@@ -91,7 +93,8 @@
+ 	--with-stream \
+ 	--with-stream_realip_module \
+ 	--with-stream_ssl_module \
+-	--with-stream_ssl_preread_module
++	--with-stream_ssl_preread_module \
++	--add-module=$(CONNECT_MODULE)
+ 
+ ifeq ($(BASE_TARGET), plus)
+ BASE_CONFIGURE_ARGS+=\
